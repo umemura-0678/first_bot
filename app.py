@@ -4,6 +4,7 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv(override=True)
 
@@ -41,7 +42,9 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     recieved_message = event.message.text
-    send_message = recieved_message + "さん、こんにちは"
+    # 現在の日時を取得
+    current_time = datetime.now().strftime("%Y年%m月%d日 %H:%M:%S")
+    send_message = f"{recieved_message}さん、こんにちは\n送信時刻: {current_time}"
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=send_message))
 
 
